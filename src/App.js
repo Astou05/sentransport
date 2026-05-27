@@ -10,8 +10,7 @@ function App() {
   // 1. Déclaration de l'état pour la recherche
   const [recherche, setRecherche] = useState("");
   const [ligneSelectionnee, setLigneSelectionnee] = useState(null);
-
-  // 2. Données enrichies (Étape 1 du Lab 3)
+  const [compteurRecherche, setCompteurRecherche] = useState(0);
   const lignes = [
     { 
       id: 1, numero: "1", depart: "Parcelles Assainies", arrivee: "Plateau", arrets: 14, listeArrets: ["Parcelles U14", "Parcelles U10", "Camberene", "Patte d'Oie", "Grand Dakar", "Colobane", "Ponty", "Plateau"] },
@@ -26,8 +25,6 @@ function App() {
     { 
       id: 6, numero: "12", depart: "Yoff", arrivee: "Sandaga", arrets: 11, listeArrets: ["Yoff Village", "Aeroport LSS", "Parcelles U17", "Grand Yoff", "HLM", "Sandaga"] }
   ];
-
-  // 3. Logique de filtrage des lignes selon le texte tapé
   const lignesFiltrees = lignes.filter(l =>
     l.depart.toLowerCase().includes(recherche.toLowerCase()) ||
     l.arrivee.toLowerCase().includes(recherche.toLowerCase()) ||
@@ -41,18 +38,36 @@ function App() {
     setLigneSelectionnee(ligne); // premier clic = selectionner
   }
   }
-
+  
   return (
     <div className="App">
       <Header />
-      <main className="contenu">
-        {/* Composant Recherche avec ses props */}
-        <Recherche valeur={recherche} onChange={setRecherche} />
-        
-        {/* Affichage du nombre de résultats */}
-        <p className="resultat-recherche">
-          {lignesFiltrees.length} ligne{lignesFiltrees.length > 1 ? 's' : ''} trouvee{lignesFiltrees.length > 1 ? 's' : ''}
-        </p>
+      <main className="contenu">    
+        <div className='search-container'>
+        {/* <Recherche valeur={recherche} onChange={setRecherche} /> */}
+        <Recherche 
+            valeur={recherche} 
+            onChange={(v) => {
+              setRecherche(v);
+              setCompteurRecherche(compteurRecherche + 1);
+            }} />
+        <button 
+          className="bouton-effacer" 
+          onClick={() => setRecherche("")} >
+          Effacer
+      </button></div>
+       <p className="stats-compteur">
+              Vous avez effectué {compteurRecherche} recherche(s)
+            </p>
+        <div className="resultats-container">
+          {lignesFiltrees.length > 0 ? (
+            <p className="resultat-recherche">
+              {lignesFiltrees.length} ligne{lignesFiltrees.length > 1 ? 's' : ''} trouvée{lignesFiltrees.length > 1 ? 's' : ''}
+            </p>
+          ) : (
+            <p className="aucune-ligne">Aucune ligne trouvée</p>
+          )}
+        </div>
        {lignesFiltrees.map(ligne => (
           <LigneBus
           key={ligne.id}

@@ -27,3 +27,22 @@
   margin-right: 12px;
   }
 }
+
+.bouton-effacer {
+  background-color: #f5f6fa;
+  color: #2c3e50;
+  border: 2px solid black;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0,1);
+  font-weight: 600;
+
+}
+.bouton-effacer:hover {
+  border-color: #0a6e31;
+  color: #0a6e31;
+}
+.search-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
