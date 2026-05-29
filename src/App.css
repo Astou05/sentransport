@@ -67,3 +67,24 @@ color: #e74c3c;
 font-family: monospace;
 font-size: 0.9rem;
 }
+
+.bouton-recharger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  max-width: 800px; /* Aligne la largeur max sur celle de ton application */
+  margin: 20px auto;
+  padding: 0 15px;
+}
+
+.btn-recharger{
+  padding: 10px 15px;
+  background-color: #0a6e31;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+}

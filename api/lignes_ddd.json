@@ -46,5 +46,21 @@
     "arrivee": "Sandaga",
     "arrets": 11,
     "listeArrets": ["Yoff Village", "Aeroport LSS", "Parcelles U17", "Grand Yoff", "HLM", "Sandaga"]
+  },
+  {
+    "id": 7,
+    "numero": "84",
+    "depart": "ESP",
+    "arrivee": "Jaxaay",
+    "arrets": 6,
+    "listeArrets": ["ESP", "UCAD", "camberene", "pikine", "mbao", "jaxaay"]
+  },
+  {
+    "id": 8,
+    "numero": "21",
+    "depart": "Pikine",
+    "arrivee": "Palais",
+    "arrets": 7,
+    "listeArrets": ["Pikine", "Patte doie", "Colobane", "Palais"]
   }
 ]

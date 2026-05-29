@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import Carte from './Carte';
 import Header from './Header';
 import Recherche from './Recherche';
 import LigneBus from './LigneBus';
@@ -15,15 +16,16 @@ function App() {
   const [ligneSelectionnee, setLigneSelectionnee] = useState(null);
   const [compteurRecherche, setCompteurRecherche] = useState(0);
 
-    // Donnees CHARGEES au démarrage
-  useEffect(() => {
-      fetch("http://localhost:5000/lignes")
+  const chargerDonnees = () => {
+    setChargement(true); // On remet le chargement à true au cas où c'est un rechargement
+    setErreur(null);     // On réinitialise l'erreur
+
+    fetch("http://localhost:5000/lignes")
       .then(response => {
         if (!response.ok) {
-        throw new Error(
-        "Erreur serveur : " + response.status);
+          throw new Error("Erreur serveur: " + response.status);
         }
-      return response.json();
+        return response.json();
       })
       .then(data => {
         setLignes(data);
@@ -33,6 +35,11 @@ function App() {
         setErreur(error.message);
         setChargement(false);
       });
+  };
+
+  // Appelé une seule fois au démarrage
+  useEffect(() => {
+    chargerDonnees();
   }, []);
 
   const lignesFiltrees = lignes.filter(l =>
@@ -41,12 +48,26 @@ function App() {
     l.numero.includes(recherche)
   );
   function handleClickLigne(ligne) {
-  if (ligneSelectionnee && ligneSelectionnee.id === ligne.id) {
-  setLigneSelectionnee(null);
-  // re-clic = deselectioner
-  } else {
-    setLigneSelectionnee(ligne); // premier clic = selectionner
-  }
+    // Si on reclique sur la ligne déjà sélectionnée, on la ferme
+    if (ligneSelectionnee && ligneSelectionnee.id === ligne.id) {
+      setLigneSelectionnee(null);
+    } else {
+      // Pattern réel : On fait une requête au clic pour obtenir les détails spécifiques
+      fetch(`http://localhost:5000/lignes/${ligne.id}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Impossible de charger les détails de cette ligne.");
+          }
+          return response.json();
+        })
+        .then(data => {
+          // data contient ici la ligne complète renvoyée par l'endpoint Flask de ton Lab 4
+          setLigneSelectionnee(data); 
+        })
+        .catch(error => {
+          alert(error.message); // Petit avertissement simple en cas d'erreur réseau sur le détail
+        });
+    }
   }
   
   // Ecran de chargement
@@ -81,7 +102,14 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <main className="contenu">    
+      <main className="contenu">   
+        <div className="bouton-recharger">
+          <button 
+            onClick={chargerDonnees} 
+            className="btn-recharger">
+           Recharger
+          </button>
+        </div> 
         <div className='search-container'>
         {/* <Recherche valeur={recherche} onChange={setRecherche} /> */}
         <Recherche 
@@ -121,6 +149,7 @@ function App() {
         ))}
           {ligneSelectionnee
           && <DetailLigne ligne={ligneSelectionnee} />}
+          <Carte />
       </main>
       <Footer />
     </div>
